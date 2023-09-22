@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pratica</title>
+    <script src="../ext4/ext-all.js"></script>
+    <link rel="stylesheet" href="../ext4/resources/css/ext-all.css">
+</head>
+<body>
+    
+</body>
+<script>
+    Ext.define('User', {
+        extend: 'Ext.data.Model',
+        fields: [
+            {name: 'id', type: 'int'},
+            {name: 'name', type: 'string'},
+            {name: 'email', type: 'string'}
+        ]
+    });
+
+    Ext.define('UserStore',{
+        extend: 'Ext.data.Store',
+        model: 'User',
+        proxy: {
+            type: 'ajax',
+            url: 'php/listaUser.php',
+            api: {
+                create: 'php/criaUser.php',
+				read: 'php/listaUser.php',
+				update: 'php/atualizaUser.php',
+				destroy: 'php/deletaUser.php',
+            },
+            reader: {
+                type: 'json',
+                root: 'users'
+            },
+            writer: {
+				type: 'json', //json ou xml
+				root: 'users',
+				writeAllFields: true,
+				encode: true,
+				allowSingle: true
+			}
+        },
+        autoLoad: true,
+        autoSync: true
+    });
+
+    Ext.onReady(function(){
+        var store = Ext.create('UserStore');
+        //console.log(store);
+
+        store.on('load', function(s){
+            console.log(s.data);
+
+            
+        })
+    })
+</script>
+</html>
